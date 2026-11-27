@@ -8,7 +8,7 @@
 ![Rust](https://img.shields.io/badge/built%20with-Rust-B7410E?logo=rust&logoColor=white)
 ![egui](https://img.shields.io/badge/UI-egui-4A90D9)
 ![Release](https://img.shields.io/github/v/release/temporaryusername00/cac-outfit-bot?color=34A862)
-![Discord](https://img.shields.io/badge/Discord-%400lol-5865F2?logo=discord&logoColor=white)
+<img src="docs/discord.svg" alt="Discord: @0lol">
 
 [**Download the latest release**](../../releases/latest)
 
@@ -317,4 +317,4 @@ folder as `CAC Outfit Bot.exe`. It finds the `data/` folder next to it.
 
 ## Contact
 
-Questions or bugs: **@0lol** on Discord.
+Questions or bugs: `@0lol` on Discord (zero, then lowercase L, O, L).
