@@ -1,0 +1,39 @@
+[package]
+name = "cac-outfit-bot"
+version = "1.0.0"
+edition = "2021"
+
+[[bin]]
+name = "CAC-Outfit-Bot"
+path = "src/main.rs"
+
+[dependencies]
+eframe = "0.37"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+ureq = "3"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "bmp", "webp"] }
+rfd = "0.15"
+ab_glyph = "0.2"
+epaint_default_fonts = "0.37"
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+wry = "0.58"
+tao = "0.38"
+
+[dependencies.windows-sys]
+version = "0.61"
+features = [
+    "Win32_Foundation",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_Graphics_Gdi",
+    "Win32_Security",
+    "Win32_Security_Cryptography",
+    "Win32_System_Threading",
+    "Win32_UI_Shell",
+]
+
+[profile.release]
+opt-level = 3
+lto = true
+strip = true

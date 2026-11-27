@@ -1,0 +1,864 @@
+{
+  "window_title": "Roblox",
+  "accounts": [],
+  "ram": {
+    "port": 7963,
+    "password": "",
+    "place_id": 7041939546,
+    "seconds_between_launches": 8.0,
+    "window_timeout": 90.0,
+    "game_load_seconds": 30.0
+  },
+  "launch_window_size": [
+    816,
+    638
+  ],
+  "max_publish_per_run": 20,
+  "seconds_between_outfits": 5.0,
+  "max_failures_per_window": 3,
+  "delays": {
+    "after_focus": 0.2,
+    "after_step": 0.25,
+    "equip_load": 0.7,
+    "expect_timeout": 3.0,
+    "key_interval": 0.03,
+    "panel_load": 0.6,
+    "publish_load": 1.0
+  },
+  "point_hints": {
+    "catalog_accessories": "inside the ACCESSORIES tile, near its bottom-right (must be empty space once the item list is open)",
+    "catalog_button": "big 'Catalog' button at the top of the main screen",
+    "close_catalog": "X at the top-right of the catalog list",
+    "close_item": "X on an item's page",
+    "close_outfits": "X at the top-right of the Outfits panel",
+    "discover_tab": "'Discover' tab at the top of the Outfits panel (only that tab has the Publish button)",
+    "item_link_box": "'Enter Item Link..' box at the bottom of the catalog list",
+    "news_close": "X on CAC's 'New Update!' popup (new accounts see it once)",
+    "outfit_name_box": "'Enter Outfit Name' box in the Publish popup",
+    "outfits_button": "big 'Outfits' button at the top of the main screen",
+    "publish_button": "green 'Publish' button at the bottom-left of the Outfits panel",
+    "publish_cancel": "'Cancel' button in the Publish popup",
+    "publish_confirm": "white 'Publish' button in the Publish popup",
+    "removal_close": "X on the Item Removal popup",
+    "reset_accessories": "'Accessories' checkbox in the Item Removal popup",
+    "reset_avatar": "trash-can button under the avatar preview (catalog open)",
+    "reset_classic": "'Classic Clothing' checkbox in the Item Removal popup",
+    "reset_hair": "'Hair' checkbox in the Item Removal popup",
+    "reset_layered": "'Layered Clothing' checkbox in the Item Removal popup",
+    "reset_remove": "red 'Remove' button in the Item Removal popup",
+    "try_on": "'Try On' button on an item's page"
+  },
+  "flow": {
+    "start": [
+      {
+        "click": "catalog_button",
+        "expect_not": "main"
+      },
+      {
+        "wait": "panel_load"
+      },
+      {
+        "click": "catalog_accessories",
+        "expect": "catalog_list"
+      },
+      {
+        "click": "reset_avatar",
+        "expect": "removal_popup"
+      },
+      {
+        "click": "reset_accessories"
+      },
+      {
+        "click": "reset_hair"
+      },
+      {
+        "click": "reset_classic"
+      },
+      {
+        "click": "reset_layered"
+      },
+      {
+        "click": "reset_remove",
+        "expect": "catalog_list",
+        "retries": 0
+      },
+      {
+        "wait": "equip_load"
+      }
+    ],
+    "per_item": [
+      {
+        "click": "item_link_box"
+      },
+      {
+        "key": "ctrl+a"
+      },
+      {
+        "key": "backspace"
+      },
+      {
+        "type": "{item_id}"
+      },
+      {
+        "key": "enter"
+      },
+      {
+        "timeout": 6.0,
+        "wait_for": "item_page"
+      },
+      {
+        "wait": 0.3
+      },
+      {
+        "click": "try_on"
+      },
+      {
+        "wait": "equip_load"
+      },
+      {
+        "click": "close_item",
+        "expect": "catalog_list",
+        "retries": 0
+      }
+    ],
+    "finish": [
+      {
+        "click": "close_catalog",
+        "expect": "main"
+      },
+      {
+        "click": "outfits_button",
+        "expect_not": "main"
+      },
+      {
+        "wait": "panel_load"
+      },
+      {
+        "click": "discover_tab",
+        "expect": "outfits_panel"
+      },
+      {
+        "click": "publish_button",
+        "expect": "publish_dialog",
+        "on_fail_note": "CAC lets new accounts publish only after some minutes of play time (or Roblox's publish cooldown is on)",
+        "on_fail_wait": 120
+      },
+      {
+        "click": "outfit_name_box"
+      },
+      {
+        "key": "ctrl+a"
+      },
+      {
+        "type": "{name}"
+      },
+      {
+        "wait": 0.3
+      },
+      {
+        "click": "publish_confirm",
+        "expect": "published_page",
+        "retries": 0,
+        "timeout": 10.0,
+        "live_only": true,
+        "publishes": true
+      },
+      {
+        "click": "close_published",
+        "expect": "outfits_panel",
+        "live_only": true
+      },
+      {
+        "click": "publish_cancel",
+        "expect": "outfits_panel",
+        "retries": 0,
+        "test_only": true
+      },
+      {
+        "wait": "publish_load"
+      },
+      {
+        "click": "close_outfits",
+        "expect": "main"
+      }
+    ]
+  },
+  "recovery": {
+    "order": [
+      "news_popup",
+      "publish_dialog",
+      "removal_popup",
+      "published_page",
+      "item_page",
+      "item_loading",
+      "outfits_panel",
+      "outfits_any",
+      "catalog_list",
+      "catalog_any",
+      "main"
+    ],
+    "close": {
+      "catalog_any": "close_catalog",
+      "catalog_list": "close_catalog",
+      "item_loading": "close_item",
+      "item_page": "close_item",
+      "news_popup": "news_close",
+      "outfits_any": "close_outfits",
+      "outfits_panel": "close_outfits",
+      "publish_dialog": "publish_cancel",
+      "published_page": "close_published",
+      "removal_popup": "removal_close"
+    }
+  },
+  "points": {
+    "1920x1080": {
+      "catalog_accessories": [
+        1250,
+        990
+      ],
+      "catalog_button": [
+        792,
+        100
+      ],
+      "close_catalog": [
+        1824,
+        158
+      ],
+      "close_item": [
+        1815,
+        172
+      ],
+      "close_outfits": [
+        1825,
+        156
+      ],
+      "close_published": [
+        1824,
+        158
+      ],
+      "discover_tab": [
+        886,
+        156
+      ],
+      "item_link_box": [
+        800,
+        988
+      ],
+      "outfit_name_box": [
+        960,
+        650
+      ],
+      "outfits_button": [
+        1127,
+        100
+      ],
+      "publish_button": [
+        702,
+        987
+      ],
+      "publish_cancel": [
+        860,
+        746
+      ],
+      "publish_confirm": [
+        1058,
+        746
+      ],
+      "removal_close": [
+        1285,
+        275
+      ],
+      "reset_accessories": [
+        641,
+        378
+      ],
+      "reset_avatar": [
+        459,
+        845
+      ],
+      "reset_classic": [
+        641,
+        478
+      ],
+      "reset_hair": [
+        641,
+        428
+      ],
+      "reset_layered": [
+        641,
+        527
+      ],
+      "reset_remove": [
+        960,
+        851
+      ],
+      "try_on": [
+        1035,
+        608
+      ]
+    },
+    "816x638": {
+      "catalog_accessories": [
+        550,
+        580
+      ],
+      "catalog_button": [
+        385,
+        114
+      ],
+      "close_catalog": [
+        768,
+        140
+      ],
+      "close_item": [
+        764,
+        150
+      ],
+      "close_outfits": [
+        763,
+        141
+      ],
+      "close_published": [
+        763,
+        140
+      ],
+      "discover_tab": [
+        390,
+        141
+      ],
+      "item_link_box": [
+        340,
+        581
+      ],
+      "news_close": [
+        661,
+        90
+      ],
+      "outfit_name_box": [
+        408,
+        440
+      ],
+      "outfits_button": [
+        503,
+        114
+      ],
+      "publish_button": [
+        317,
+        582
+      ],
+      "publish_cancel": [
+        309,
+        536
+      ],
+      "publish_confirm": [
+        507,
+        536
+      ],
+      "removal_close": [
+        580,
+        204
+      ],
+      "reset_accessories": [
+        239,
+        258
+      ],
+      "reset_avatar": [
+        216,
+        507
+      ],
+      "reset_classic": [
+        239,
+        311
+      ],
+      "reset_hair": [
+        239,
+        285
+      ],
+      "reset_layered": [
+        239,
+        338
+      ],
+      "reset_remove": [
+        408,
+        509
+      ],
+      "try_on": [
+        433,
+        325
+      ]
+    }
+  },
+  "states": {
+    "1920x1080": {
+      "catalog_any": {
+        "tol": 20,
+        "pixels": [
+          [
+            1824,
+            158,
+            [
+              255,
+              255,
+              255
+            ]
+          ]
+        ]
+      },
+      "catalog_list": {
+        "tol": 20,
+        "pixels": [
+          [
+            1824,
+            158,
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          [
+            650,
+            970,
+            [
+              36,
+              38,
+              40
+            ]
+          ],
+          [
+            1650,
+            370,
+            [
+              35,
+              37,
+              39
+            ]
+          ]
+        ]
+      },
+      "item_loading": {
+        "tol": 12,
+        "pixels": [
+          [
+            1815,
+            172,
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          [
+            700,
+            988,
+            [
+              35,
+              37,
+              39
+            ]
+          ],
+          [
+            1250,
+            990,
+            [
+              35,
+              37,
+              39
+            ]
+          ]
+        ]
+      },
+      "item_page": {
+        "tol": 30,
+        "pixels": [
+          [
+            1650,
+            370,
+            [
+              0,
+              176,
+              111
+            ]
+          ]
+        ]
+      },
+      "main": {
+        "tol": 20,
+        "pixels": [
+          [
+            63,
+            995,
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          [
+            1880,
+            1015,
+            [
+              255,
+              255,
+              255
+            ]
+          ]
+        ]
+      },
+      "outfits_panel": {
+        "tol": 30,
+        "pixels": [
+          [
+            650,
+            970,
+            [
+              85,
+              255,
+              127
+            ]
+          ]
+        ]
+      },
+      "publish_dialog": {
+        "tol": 30,
+        "pixels": [
+          [
+            1058,
+            760,
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          [
+            650,
+            970,
+            [
+              42,
+              127,
+              63
+            ]
+          ]
+        ]
+      },
+      "published_page": {
+        "tol": 25,
+        "pixels": [
+          [
+            1790,
+            300,
+            [
+              16,
+              181,
+              120
+            ]
+          ],
+          [
+            1824,
+            158,
+            [
+              251,
+              251,
+              251
+            ]
+          ]
+        ]
+      },
+      "removal_popup": {
+        "tol": 20,
+        "pixels": [
+          [
+            1824,
+            158,
+            [
+              102,
+              102,
+              102
+            ]
+          ],
+          [
+            1250,
+            990,
+            [
+              14,
+              15,
+              16
+            ]
+          ]
+        ]
+      }
+    },
+    "816x638": {
+      "catalog_any": {
+        "tol": 20,
+        "pixels": [
+          [
+            768,
+            140,
+            [
+              255,
+              255,
+              255
+            ]
+          ]
+        ]
+      },
+      "catalog_list": {
+        "tol": 20,
+        "pixels": [
+          [
+            768,
+            140,
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          [
+            550,
+            581,
+            [
+              35,
+              37,
+              39
+            ]
+          ],
+          [
+            764,
+            150,
+            [
+              35,
+              37,
+              39
+            ]
+          ]
+        ]
+      },
+      "item_loading": {
+        "tol": 12,
+        "pixels": [
+          [
+            764,
+            150,
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          [
+            685,
+            220,
+            [
+              35,
+              37,
+              39
+            ]
+          ],
+          [
+            550,
+            581,
+            [
+              35,
+              37,
+              39
+            ]
+          ],
+          [
+            768,
+            140,
+            [
+              38,
+              40,
+              42
+            ]
+          ]
+        ]
+      },
+      "item_page": {
+        "tol": 30,
+        "pixels": [
+          [
+            685,
+            220,
+            [
+              0,
+              176,
+              111
+            ]
+          ]
+        ]
+      },
+      "main": {
+        "tol": 20,
+        "pixels": [
+          [
+            48,
+            590,
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          [
+            767,
+            600,
+            [
+              255,
+              255,
+              255
+            ]
+          ]
+        ]
+      },
+      "news_popup": {
+        "tol": 20,
+        "pixels": [
+          [
+            650,
+            79,
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          [
+            672,
+            101,
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          [
+            690,
+            300,
+            [
+              35,
+              37,
+              40
+            ]
+          ]
+        ]
+      },
+      "outfits_any": {
+        "tol": 20,
+        "pixels": [
+          [
+            763,
+            141,
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          [
+            768,
+            140,
+            [
+              35,
+              37,
+              39
+            ]
+          ]
+        ]
+      },
+      "outfits_panel": {
+        "tol": 30,
+        "pixels": [
+          [
+            285,
+            575,
+            [
+              85,
+              255,
+              127
+            ]
+          ]
+        ]
+      },
+      "publish_dialog": {
+        "tol": 30,
+        "pixels": [
+          [
+            450,
+            550,
+            [
+              255,
+              255,
+              255
+            ]
+          ],
+          [
+            285,
+            575,
+            [
+              38,
+              40,
+              44
+            ]
+          ]
+        ]
+      },
+      "published_page": {
+        "tol": 25,
+        "pixels": [
+          [
+            692,
+            205,
+            [
+              0,
+              176,
+              111
+            ]
+          ],
+          [
+            300,
+            581,
+            [
+              40,
+              42,
+              44
+            ]
+          ]
+        ]
+      },
+      "removal_popup": {
+        "tol": 20,
+        "pixels": [
+          [
+            768,
+            140,
+            [
+              102,
+              102,
+              102
+            ]
+          ],
+          [
+            550,
+            581,
+            [
+              14,
+              15,
+              16
+            ]
+          ]
+        ]
+      }
+    }
+  },
+  "gui": {
+    "mode": "single",
+    "test_mode": true,
+    "check_items": false,
+    "minimize_while_running": true,
+    "known_accounts": []
+  }
+}
