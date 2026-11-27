@@ -433,7 +433,7 @@ pub fn login_window_main(dir: &Path) -> ! {
 
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new()
-        .with_title("Sign in to Roblox - CAC Outfit Bot")
+        .with_title("Sign in to Roblox  |  CAC Outfit Bot  |  @0lol on Discord")
         .with_inner_size(tao::dpi::LogicalSize::new(520.0, 760.0))
         .build(&event_loop)
         .expect("window");

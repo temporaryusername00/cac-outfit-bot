@@ -590,8 +590,14 @@ impl Studio {
         self.handle_drops(ui.ctx());
         self.poll_link(data_dir);
         self.shortcuts(ui.ctx());
+        // The studio packs a lot of tools in, so it keeps slightly smaller text than the other tabs.
+        for (style, size) in [(egui::TextStyle::Body, 14.0), (egui::TextStyle::Button, 14.0), (egui::TextStyle::Small, 12.0)] {
+            if let Some(f) = ui.style_mut().text_styles.get_mut(&style) {
+                f.size = size;
+            }
+        }
         let area = ui.available_rect_before_wrap();
-        let (lw, rw, gap) = (200.0, 206.0, 12.0);
+        let (lw, rw, gap) = (214.0, 214.0, 12.0);
         let left = Rect::from_min_size(area.min, vec2(lw, area.height()));
         let right = Rect::from_min_max(pos2(area.max.x - rw, area.min.y), area.max);
         let mid = Rect::from_min_max(pos2(left.max.x + gap, area.min.y), pos2(right.min.x - gap, area.max.y));

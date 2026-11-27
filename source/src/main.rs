@@ -21,19 +21,24 @@ use config::{Config, Mode, Outfit, OutfitsFile, PublishedFile};
 use eframe::egui::{self, Color32, CornerRadius, Margin, RichText, Stroke, Vec2};
 use engine::Shared;
 
-const WIDTH: f32 = 960.0;
-const HEIGHT: f32 = 680.0;
+const WIDTH: f32 = 1000.0;
+const HEIGHT: f32 = 720.0;
+
+/// Shown in every window title.
+pub const TITLE: &str = "CAC Outfit Bot  |  @0lol on Discord";
 
 const BG: Color32 = Color32::from_rgb(22, 24, 28);
 const CARD: Color32 = Color32::from_rgb(31, 34, 40);
-const BORDER: Color32 = Color32::from_rgb(48, 52, 60);
+const BORDER: Color32 = Color32::from_rgb(54, 59, 68);
 const INPUT: Color32 = Color32::from_rgb(16, 17, 20);
 const ACCENT: Color32 = Color32::from_rgb(52, 168, 98);
 const DANGER: Color32 = Color32::from_rgb(200, 64, 64);
 const WARN: Color32 = Color32::from_rgb(230, 170, 60);
 const GOOD: Color32 = Color32::from_rgb(90, 200, 120);
-const MUTED: Color32 = Color32::from_rgb(140, 146, 156);
-const TEXT: Color32 = Color32::from_rgb(220, 223, 228);
+const MUTED: Color32 = Color32::from_rgb(168, 174, 184);
+const TEXT: Color32 = Color32::from_rgb(234, 236, 240);
+/// Outline for buttons, boxes and checkboxes so they stand out from the cards.
+const EDGE: Color32 = Color32::from_rgb(78, 85, 98);
 
 #[derive(PartialEq, Eq, Clone, Copy)]
 enum Tab {
@@ -100,16 +105,21 @@ fn style(ctx: &egui::Context) {
         use egui::{FontId, TextStyle};
         s.visuals = egui::Visuals::dark();
         s.text_styles = [
-            (TextStyle::Heading, FontId::proportional(20.0)),
-            (TextStyle::Body, FontId::proportional(14.0)),
-            (TextStyle::Button, FontId::proportional(14.0)),
-            (TextStyle::Small, FontId::proportional(11.5)),
-            (TextStyle::Monospace, FontId::monospace(12.5)),
+            (TextStyle::Heading, FontId::proportional(21.0)),
+            (TextStyle::Body, FontId::proportional(15.0)),
+            (TextStyle::Button, FontId::proportional(15.0)),
+            (TextStyle::Small, FontId::proportional(12.5)),
+            (TextStyle::Monospace, FontId::monospace(13.0)),
         ]
         .into();
-        s.spacing.item_spacing = Vec2::new(8.0, 7.0);
-        s.spacing.button_padding = Vec2::new(10.0, 5.0);
-        s.spacing.interact_size.y = 26.0;
+        s.spacing.item_spacing = Vec2::new(8.0, 8.0);
+        s.spacing.button_padding = Vec2::new(11.0, 5.0);
+        s.spacing.interact_size.y = 28.0;
+        // Bigger checkboxes and radio buttons, and a scrollbar you can actually see.
+        s.spacing.icon_width = 18.0;
+        s.spacing.icon_width_inner = 10.0;
+        s.spacing.icon_spacing = 7.0;
+        s.spacing.scroll = egui::style::ScrollStyle::solid();
         let v = &mut s.visuals;
         v.panel_fill = BG;
         v.window_fill = CARD;
@@ -126,6 +136,17 @@ fn style(ctx: &egui::Context) {
         v.widgets.inactive.bg_fill = Color32::from_rgb(44, 48, 56);
         v.widgets.hovered.weak_bg_fill = Color32::from_rgb(56, 61, 71);
         v.widgets.hovered.bg_fill = Color32::from_rgb(56, 61, 71);
+        v.widgets.active.weak_bg_fill = Color32::from_rgb(64, 70, 82);
+        v.widgets.active.bg_fill = Color32::from_rgb(64, 70, 82);
+        v.widgets.inactive.bg_stroke = Stroke::new(1.0, EDGE);
+        v.widgets.hovered.bg_stroke = Stroke::new(1.0, ACCENT.gamma_multiply(0.9));
+        v.widgets.active.bg_stroke = Stroke::new(1.5, ACCENT);
+        v.widgets.inactive.fg_stroke = Stroke::new(1.5, TEXT);
+        v.widgets.hovered.fg_stroke = Stroke::new(1.5, Color32::WHITE);
+        v.widgets.active.fg_stroke = Stroke::new(2.0, Color32::WHITE);
+        v.widgets.noninteractive.bg_stroke = Stroke::new(1.0, BORDER);
+        v.widgets.noninteractive.fg_stroke = Stroke::new(1.0, TEXT);
+        v.text_cursor.stroke = Stroke::new(2.0, ACCENT);
     });
 }
 
@@ -139,7 +160,7 @@ fn card<R>(ui: &mut egui::Ui, title: &str, add: impl FnOnce(&mut egui::Ui) -> R)
         .show(ui, |ui| {
             ui.set_width(ui.available_width());
             if !title.is_empty() {
-                ui.label(RichText::new(title).strong().size(15.0));
+                ui.label(RichText::new(title).strong().size(16.5).color(Color32::WHITE));
                 ui.add_space(2.0);
             }
             add(ui)
@@ -391,7 +412,15 @@ impl App {
                     .fill(if selected { Color32::from_rgb(48, 53, 62) } else { Color32::TRANSPARENT })
                     .stroke(Stroke::NONE)
                     .min_size(Vec2::new(84.0, 30.0));
-                if ui.add(b).clicked() {
+                let r = ui.add(b);
+                if selected {
+                    let rect = r.rect;
+                    ui.painter().line_segment(
+                        [egui::pos2(rect.left() + 12.0, rect.bottom() + 3.0), egui::pos2(rect.right() - 12.0, rect.bottom() + 3.0)],
+                        Stroke::new(3.0, ACCENT),
+                    );
+                }
+                if r.clicked() {
                     self.tab = tab;
                 }
             }
@@ -560,7 +589,7 @@ impl App {
 
         card(ui, "", |ui| {
             ui.horizontal(|ui| {
-                ui.label(RichText::new("Log").strong().size(15.0));
+                ui.label(RichText::new("Log").strong().size(16.5).color(Color32::WHITE));
                 ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                     open_failures = ui.small_button("Open failures folder").clicked();
                     if ui.small_button("Clear").clicked() {
@@ -1198,7 +1227,7 @@ fn main() -> eframe::Result {
             .with_max_inner_size([WIDTH, HEIGHT])
             .with_resizable(false)
             .with_maximize_button(false)
-            .with_title("CAC Outfit Bot"),
+            .with_title(TITLE),
         ..Default::default()
     };
     eframe::run_native("CAC Outfit Bot", options, Box::new(|cc| Ok(Box::new(App::new(cc)))))
