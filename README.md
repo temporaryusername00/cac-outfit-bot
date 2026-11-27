@@ -7,6 +7,8 @@
 ![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows&logoColor=white)
 ![Rust](https://img.shields.io/badge/built%20with-Rust-B7410E?logo=rust&logoColor=white)
 ![egui](https://img.shields.io/badge/UI-egui-4A90D9)
+![Release](https://img.shields.io/github/v/release/temporaryusername00/cac-outfit-bot?color=34A862)
+![Discord](https://img.shields.io/badge/Discord-%400lol-5865F2?logo=discord&logoColor=white)
 
 [**Download the latest release**](../../releases/latest)
 
@@ -40,12 +42,20 @@ person would. No scripts are injected and no executor is used.
   <tr>
     <td><img src="docs/outfits.png" alt="Outfits tab"></td>
     <td><img src="docs/clothing.png" alt="Clothing tab"></td>
+    <td><img src="docs/settings.png" alt="Settings tab"></td>
   </tr>
   <tr>
     <td align="center">Outfits</td>
     <td align="center">Clothing</td>
+    <td align="center">Settings</td>
   </tr>
 </table>
+
+## What's new in 1.1
+
+- Easier to read: brighter text, outlined buttons and boxes, bigger checkboxes, scrollbars you can see.
+- The tab you're on is underlined in green.
+- Bigger window (1000x720), so nothing in the Clothing tab gets cut off.
 
 ## Getting started
 
@@ -304,3 +314,7 @@ cargo build --release
 
 The exe is built to `source/target/release/CAC-Outfit-Bot.exe`. Copy it to the repo's main
 folder as `CAC Outfit Bot.exe`. It finds the `data/` folder next to it.
+
+## Contact
+
+Questions or bugs: **@0lol** on Discord.
